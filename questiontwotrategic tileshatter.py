@@ -25,11 +25,11 @@ def max_points(tile_multipliers):
 def main():
     # Example 1 [cite: 98]
     tiles1 = [3, 1, 5, 8]
-    print(f"Example 1 Output: {max_points(tiles1)}") # Expected: 167 [cite: 99]
+    print(f"Example 1 Output: {max_points(tiles1)}") 
     
     # Example 2 [cite: 109]
     tiles2 = [1, 5]
-    print(f"Example 2 Output: {max_points(tiles2)}") # Expected: 10 [cite: 108]
+    print(f"Example 2 Output: {max_points(tiles2)}") 
 
 if __name__ == "__main__":
     main()
