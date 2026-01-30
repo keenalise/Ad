@@ -346,19 +346,19 @@ The `Images/` folder contains visual documentation of the Emergency Network Simu
 - Four action buttons for network operations
 
 ### MST Generation
-| Before | After |
+|  | |
 |--------|-------|
 | ![MST Before](Images/mst.png) | ![MST After](Images/mst_.png) |
 - Shows Kruskal's algorithm highlighting minimum spanning tree in red
 
 ### K-Disjoint Paths
-| Before | After |
+|  | |
 |--------|-------|
 | ![K-Disjoint Before](Images/kdisjoint.png) | ![K-Disjoint After](Images/kdisjoint_.png) |
 - Demonstrates finding multiple independent paths for redundancy
 
 ### Node Failure Simulation
-| Before | After |
+| | |
 |--------|-------|
 | ![Failure Before](Images/nodefailure.png) | ![Failure After](Images/nodefailure_.png) |
 - Shows network resilience when Pokhara node fails
@@ -599,15 +599,9 @@ A* typically finds the shortest path most efficiently
 
 ---
 
-## 🤝 Contributing
 
-This is an academic project. For improvements or bug fixes:
-1. Document the issue
-2. Propose solution with complexity analysis
-3. Test thoroughly
-4. Update README if needed
 
----
+
 
 ## 📝 Notes
 
@@ -635,11 +629,7 @@ This is an academic project. For improvements or bug fixes:
 pip install --upgrade numpy networkx matplotlib
 ```
 
-### matplotlib backend issues
-Add to script:
-```python
-import matplotlib
-matplotlib.use('TkAgg')
+
 ```
 
 ### Threading issues (Question 5b)
@@ -689,7 +679,7 @@ This project is for educational purposes.
 
 ## 👥 Authors
 
-Created as part of Advanced Algorithms coursework.
+Created as part of Advanced Algorithms coursework by Prajwal Bhandari.
 
 ---
 
