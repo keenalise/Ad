@@ -20,8 +20,24 @@ Advance Algorithm/
 ├── Question Four/
 │   └── SmartGrid.py            # Energy Distribution Optimization
 │
-└── Question Five/
-    └── GUI.py                  # Emergency Network Simulator (Tkinter GUI)
+├── Question Five/
+│   ├── GUI.py                  # Emergency Network Simulator (Tkinter GUI)
+│   └── 5b_threading.py         # Multi-threaded Merge Sort
+│
+├── Question Six/
+│   └── heap.py                 # Graph Search Algorithms (DFS, BFS, A*)
+│
+├── Images/
+│   ├── main.png                # Main GUI interface
+│   ├── mst.png                 # MST visualization (before)
+│   ├── mst_.png                # MST visualization (highlighted)
+│   ├── kdisjoint.png           # K-disjoint paths (before)
+│   ├── kdisjoint_.png          # K-disjoint paths (result)
+│   ├── nodefailure.png         # Node failure simulation (before)
+│   ├── nodefailure_.png        # Node failure simulation (after)
+│   └── reset.png               # Reset network view
+│
+└── README.md                   # This file
 ```
 
 ## 🚀 Features
@@ -173,7 +189,7 @@ Renewable Energy Usage: 72.34%
 
 ---
 
-### Question 5: Emergency Network Simulator
+### Question 5: Emergency Network & Threading
 
 #### GUI.py - Interactive Network Visualization
 - **Framework**: Tkinter + NetworkX + Matplotlib
@@ -212,6 +228,145 @@ python GUI.py
 - Preloaded cities: Kathmandu, Lalitpur, Bhaktapur, Pokhara, Chitwan, Banepa
 - Weighted edges representing distances
 
+#### 5b_threading.py - Multi-threaded Merge Sort
+- **Algorithm**: Parallel Merge Sort using Threading
+- **Purpose**: Demonstrate concurrent sorting with thread synchronization
+- **Complexity**: O(n log n) with parallel speedup
+- **Threading Model**: Parent-child thread coordination
+
+**Implementation Details:**
+- **Global Arrays**: `original_list` and `sorted_list`
+- **Thread 1**: Sorts first half of array
+- **Thread 2**: Sorts second half of array
+- **Thread 3**: Merges both sorted halves
+- **Synchronization**: Uses `join()` to ensure proper ordering
+
+**Key Functions:**
+- `sorting_thread_func(start_index, end_index)` - Sorts subarray segment
+- `merging_thread_func(mid)` - Merges two sorted halves
+- Uses Python's `threading.Thread` for concurrent execution
+
+**Example Usage:**
+```bash
+python 5b_threading.py
+```
+
+**Sample Output:**
+```
+Original List: [7, 12, 19, 3, 18, 4, 2, 6, 15, 8]
+Thread sorting range 0 to 5: [3, 7, 12, 18, 19]
+Thread sorting range 5 to 10: [2, 4, 6, 8, 15]
+Merging thread completed. Result: [2, 3, 4, 6, 7, 8, 12, 15, 18, 19]
+Final Sorted List: [2, 3, 4, 6, 7, 8, 12, 15, 18, 19]
+```
+
+**Thread Execution Flow:**
+```
+Parent Thread
+    ├─> Thread 0 (Sort left half)  ──┐
+    ├─> Thread 1 (Sort right half) ──┤ join()
+    └─> Thread 2 (Merge both)      ──┘ join()
+Final Output
+```
+
+---
+
+### Question 6: Graph Search Algorithms
+
+#### heap.py - Pathfinding on Polish Road Network
+- **Algorithms**: DFS, BFS, A* Search
+- **Purpose**: Compare uninformed vs informed search strategies
+- **Graph**: Polish cities with road distances
+- **Heuristic**: Straight-line distances to goal (Plock)
+
+**Algorithm Details:**
+
+**1. Depth-First Search (DFS)**
+- **Strategy**: Explores deepest path first (LIFO)
+- **Data Structure**: Stack
+- **Completeness**: Not guaranteed on infinite graphs
+- **Optimality**: Not guaranteed
+
+**2. Breadth-First Search (BFS)**
+- **Strategy**: Explores level by level (FIFO)
+- **Data Structure**: Queue
+- **Completeness**: Yes
+- **Optimality**: Yes (for unweighted graphs)
+
+**3. A* Search**
+- **Strategy**: Best-first search with heuristic
+- **Data Structure**: Priority Queue (min-heap)
+- **Evaluation Function**: f(n) = g(n) + h(n)
+  - g(n) = actual cost from start
+  - h(n) = heuristic (straight-line distance)
+- **Completeness**: Yes
+- **Optimality**: Yes (with admissible heuristic)
+
+**Key Functions:**
+- `search_algo(type)` - Generic search implementation for all three algorithms
+- Unified interface switching between DFS, BFS, and A*
+
+**Graph Data:**
+- **17 Polish cities** including Glogow, Poznań, Warsaw, Kraków, etc.
+- **Start**: Glogow
+- **Goal**: Plock
+- **Edge weights**: Actual road distances in km
+- **Heuristic values**: Straight-line distances to Plock
+
+**Example Usage:**
+```bash
+python heap.py
+```
+
+**Sample Output:**
+```
+DFS Path: ['Glogow', 'Poznań', 'Bydgoszcz', 'Włocławek', 'Plock']
+BFS Path: ['Glogow', 'Poznań', 'Bydgoszcz', 'Włocławek', 'Plock']
+A* Path: ['Glogow', 'Poznań', 'Bydgoszcz', 'Włocławek', 'Plock']
+```
+
+**Performance Comparison:**
+| Algorithm | Nodes Explored | Path Found | Optimal? |
+|-----------|----------------|------------|----------|
+| DFS       | Variable       | Yes        | No       |
+| BFS       | More           | Yes        | Yes*     |
+| A*        | Fewer          | Yes        | Yes      |
+
+*BFS is optimal for unweighted graphs; A* is optimal with admissible heuristic
+
+---
+
+## 📸 Screenshots
+
+The `Images/` folder contains visual documentation of the Emergency Network Simulator:
+
+### Main Interface
+![Main GUI](Images/main.png)
+- Clean interface with control panel and graph visualization
+- Four action buttons for network operations
+
+### MST Generation
+| Before | After |
+|--------|-------|
+| ![MST Before](Images/mst.png) | ![MST After](Images/mst_.png) |
+- Shows Kruskal's algorithm highlighting minimum spanning tree in red
+
+### K-Disjoint Paths
+| Before | After |
+|--------|-------|
+| ![K-Disjoint Before](Images/kdisjoint.png) | ![K-Disjoint After](Images/kdisjoint_.png) |
+- Demonstrates finding multiple independent paths for redundancy
+
+### Node Failure Simulation
+| Before | After |
+|--------|-------|
+| ![Failure Before](Images/nodefailure.png) | ![Failure After](Images/nodefailure_.png) |
+- Shows network resilience when Pokhara node fails
+
+### Network Reset
+![Reset Network](Images/reset.png)
+- Returns to original network configuration
+
 ---
 
 ## 🛠️ Installation & Setup
@@ -234,6 +389,12 @@ pip install tkinter  # Usually comes with Python
 pip install numpy networkx matplotlib
 ```
 
+### Verify Installation
+```bash
+python -m tkinter  # Should open a test window
+python -c "import numpy, networkx, matplotlib; print('All libraries installed!')"
+```
+
 ---
 
 ## 📊 Algorithm Complexity Summary
@@ -246,8 +407,11 @@ pip install numpy networkx matplotlib
 | Service Centers | Tree DP | O(n) | O(h) |
 | Smart Grid | Greedy Allocation | O(h × d × s) | O(h × d) |
 | Network MST | Kruskal's Algorithm | O(E log E) | O(V + E) |
+| Threaded Sort | Parallel Merge Sort | O(n log n) | O(n) |
+| DFS/BFS | Graph Traversal | O(V + E) | O(V) |
+| A* Search | Informed Search | O(b^d) | O(b^d) |
 
-*where: n = problem size, k = iterations, h = tree height/hours, d = districts, s = sources, V = vertices, E = edges*
+*where: n = problem size, k = iterations, h = tree height/hours, d = districts, s = sources, V = vertices, E = edges, b = branching factor, d = depth*
 
 ---
 
@@ -264,15 +428,22 @@ pip install numpy networkx matplotlib
 
 3. **Graph Algorithms**
    - Minimum Spanning Tree
-   - Path finding
+   - Path finding (DFS, BFS, A*)
    - Network resilience
+   - Heuristic search
 
-4. **Real-World Applications**
+4. **Parallel Computing**
+   - Multi-threading
+   - Thread synchronization
+   - Concurrent sorting
+
+5. **Real-World Applications**
    - IoT network design
    - Route optimization
    - Resource allocation
    - Infrastructure planning
    - Energy management
+   - Emergency response systems
 
 ---
 
@@ -300,9 +471,29 @@ python ServiceCenter.py
 cd "../Question Four"
 python SmartGrid.py
 
-# Question 5: Network simulator GUI
+# Question 5a: Network simulator GUI
 cd "../Question Five"
 python GUI.py
+
+# Question 5b: Multi-threaded sorting
+python 5b_threading.py
+
+# Question 6: Graph search algorithms
+cd "../Question Six"
+python heap.py
+```
+
+### Running All Tests
+```bash
+# Create a simple test runner
+for dir in "Question One" "Question Two" "Question Three" "Question Four" "Question Six"; do
+    cd "$dir"
+    for file in *.py; do
+        echo "Running $file..."
+        python "$file"
+    done
+    cd ..
+done
 ```
 
 ---
@@ -330,7 +521,7 @@ demand_table = [
 ]
 ```
 
-### Modifying Question 5 - Network Topology
+### Modifying Question 5a - Network Topology
 Edit `GUI.py`:
 ```python
 edges = [
@@ -339,28 +530,72 @@ edges = [
 ]
 ```
 
----
+### Modifying Question 5b - Array Size
+Edit `5b_threading.py`:
+```python
+original_list = [7, 12, 19, 3, 18, 4, 2, 6, 15, 8]  # Modify list
+```
 
-## 📸 Screenshots
+### Modifying Question 6 - Graph Structure
+Edit `heap.py`:
+```python
+graph = {
+    'CityA': [('CityB', distance), ...],
+    # Add more cities and connections
+}
 
-### Emergency Network Simulator (Question 5)
-The GUI displays:
-- Network graph with cities as nodes
-- Weighted edges showing distances
-- MST visualization in red
-- Control panel with action buttons
+heuristic = {
+    'CityA': straight_line_distance_to_goal,
+    # Add heuristic values
+}
+```
 
 ---
 
 ## 🧪 Testing
 
+### Individual Tests
 All scripts include built-in test cases and can be run directly:
 
 ```bash
 python <script_name>.py
 ```
 
-Expected outputs are documented in the code comments.
+### Expected Outputs
+
+**Question 1a:**
+```
+Optimal Hub: [1. 1.]
+Minimum Distance Sum: 4.00000
+```
+
+**Question 1b:**
+```
+Results using exponential cooling: ~7800-8000
+Results using linear cooling: ~8000-8300
+```
+
+**Question 2:**
+```
+Example 1 Output: 167
+Example 2 Output: 10
+```
+
+**Question 3:**
+```
+Minimum Service Centers Required: 2
+```
+
+**Question 5b:**
+```
+Final Sorted List: [2, 3, 4, 6, 7, 8, 12, 15, 18, 19]
+```
+
+**Question 6:**
+```
+All three algorithms should find a valid path from Glogow to Plock
+A* typically finds the shortest path most efficiently
+```
 
 ---
 
@@ -370,6 +605,7 @@ This is an academic project. For improvements or bug fixes:
 1. Document the issue
 2. Propose solution with complexity analysis
 3. Test thoroughly
+4. Update README if needed
 
 ---
 
@@ -380,13 +616,15 @@ This is an academic project. For improvements or bug fixes:
 - **Question 2**: Implements interval DP similar to burst balloons problem
 - **Question 3**: Uses tree DP with three states (uncovered, has center, covered)
 - **Question 4**: Prioritizes renewable energy sources by cost
-- **Question 5**: Interactive visualization requires display environment (X11, Wayland, etc.)
+- **Question 5a**: Interactive visualization requires display environment (X11, Wayland, etc.)
+- **Question 5b**: Demonstrates thread synchronization with join() operations
+- **Question 6**: A* uses admissible heuristic (straight-line distance) for optimality
 
 ---
 
 ## 🐛 Troubleshooting
 
-### GUI doesn't display (Question 5)
+### GUI doesn't display (Question 5a)
 - Ensure `tkinter` is installed: `python -m tkinter`
 - On Linux: `sudo apt-get install python3-tk`
 - On macOS: Tkinter comes with Python
@@ -404,15 +642,42 @@ import matplotlib
 matplotlib.use('TkAgg')
 ```
 
+### Threading issues (Question 5b)
+- Ensure Python version is 3.x
+- Threading module is built-in, no installation needed
+- If race conditions occur, results may vary slightly
+
+### Graph search returns None (Question 6)
+- Verify graph connectivity
+- Check start and goal nodes exist in graph
+- Ensure heuristic values are defined for all nodes
+
 ---
 
 ## 📚 References
 
-- Geometric Median: Weiszfeld's Algorithm
-- Simulated Annealing: Kirkpatrick et al. (1983)
-- Dynamic Programming: Bellman's Principle of Optimality
-- Kruskal's Algorithm: MST construction
-- Graph Theory: NetworkX documentation
+### Algorithms
+- **Geometric Median**: Weiszfeld's Algorithm
+- **Simulated Annealing**: Kirkpatrick et al. (1983)
+- **Dynamic Programming**: Bellman's Principle of Optimality
+- **Kruskal's Algorithm**: MST construction
+- **A* Search**: Hart, Nilsson, and Raphael (1968)
+- **Merge Sort**: Divide and Conquer paradigm
+
+### Libraries
+- **NetworkX**: Graph algorithms and visualization
+- **NumPy**: Numerical computing
+- **Matplotlib**: Plotting and visualization
+- **Threading**: Python standard library for concurrency
+- **Heapq**: Priority queue implementation
+
+### Problem Types
+- Facility Location Problem
+- Traveling Salesman Problem
+- Interval Dynamic Programming
+- Set Cover Problem
+- Resource Allocation
+- Graph Search
 
 ---
 
@@ -435,9 +700,39 @@ Students will learn:
 - Dynamic programming techniques
 - Graph algorithm implementation
 - GUI development with Python
+- Multi-threading and synchronization
+- Informed vs uninformed search strategies
 - Algorithm complexity analysis
 - Trade-offs between solution quality and computation time
+- Parallel computing concepts
+- Heuristic design for A* search
 
 ---
 
-**Last Updated**: January 2026
+## 🌟 Project Highlights
+
+### Algorithmic Diversity
+- **6 different problem domains** covered
+- **10+ algorithms** implemented
+- **3 search strategies** compared
+
+### Practical Applications
+- Emergency network planning (Nepal cities)
+- Energy distribution (renewable vs non-renewable)
+- Polish road network pathfinding
+- Multi-threaded data processing
+
+### Interactive Elements
+- Full GUI application with network visualization
+- Real-time MST generation
+- Node failure simulation
+- Visual feedback for all operations
+
+### Code Quality
+- Well-documented functions
+- Complexity analysis provided
+- Modular design
+- Reusable components
+
+---
+
