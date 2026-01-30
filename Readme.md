@@ -364,15 +364,6 @@ Expected outputs are documented in the code comments.
 
 ---
 
-## 🤝 Contributing
-
-This is an academic project. For improvements or bug fixes:
-1. Document the issue
-2. Propose solution with complexity analysis
-3. Test thoroughly
-
----
-
 ## 📝 Notes
 
 - **Question 1a**: Uses Weiszfeld's algorithm for geometric median calculation
@@ -386,23 +377,6 @@ This is an academic project. For improvements or bug fixes:
 
 ## 🐛 Troubleshooting
 
-### GUI doesn't display (Question 5)
-- Ensure `tkinter` is installed: `python -m tkinter`
-- On Linux: `sudo apt-get install python3-tk`
-- On macOS: Tkinter comes with Python
-- On Windows: Reinstall Python with Tk/Tcl option
-
-### Import errors
-```bash
-pip install --upgrade numpy networkx matplotlib
-```
-
-### matplotlib backend issues
-Add to script:
-```python
-import matplotlib
-matplotlib.use('TkAgg')
-```
 
 ---
 
@@ -424,19 +398,7 @@ This project is for educational purposes.
 
 ## 👥 Authors
 
-Created as part of Advanced Algorithms coursework.
-
----
-
-## 🎓 Learning Objectives
-
-Students will learn:
-- How to apply optimization algorithms to real problems
-- Dynamic programming techniques
-- Graph algorithm implementation
-- GUI development with Python
-- Algorithm complexity analysis
-- Trade-offs between solution quality and computation time
+Created as part of Advanced Algorithms coursework of Prajwal Bhandari.
 
 ---
 
