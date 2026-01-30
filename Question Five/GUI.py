@@ -24,17 +24,22 @@ class EmergencySimulator:
 
     def setup_gui(self):
         # Header
-        header = tk.Label(self.root, text="Emergency Network Simulator", font=("Segoe UI", 20, "bold"), fg="#1a237e", bg="#f0f4f8", pady=20)
+        header = tk.Label(self.root, text="Emergency Network Simulator", font=("Segoe UI", 22, "bold"), fg="#283593", bg="#f0f4f8", pady=18)
         header.pack(side=tk.TOP, fill=tk.X)
 
-        # Control Panel
-        control_frame = tk.Frame(self.root, padx=18, pady=18, bg="#e3eafc", bd=2, relief=tk.RIDGE)
-        control_frame.pack(side=tk.LEFT, fill=tk.Y, padx=10, pady=10)
+        # Info Bar
+        self.status_var = tk.StringVar(value="Welcome! Ready to simulate.")
+        status_bar = tk.Label(self.root, textvariable=self.status_var, font=("Segoe UI", 11), bg="#e8eaf6", fg="#283593", anchor="w", padx=12, pady=6, relief=tk.FLAT)
+        status_bar.pack(side=tk.BOTTOM, fill=tk.X)
 
-        tk.Label(control_frame, text="Network Controls", font=("Segoe UI", 14, "bold"), fg="#3949ab", bg="#e3eafc").pack(pady=(0,10))
+        # Control Panel
+        control_frame = tk.Frame(self.root, padx=20, pady=20, bg="#e3eafc", bd=2, relief=tk.RIDGE)
+        control_frame.pack(side=tk.LEFT, fill=tk.Y, padx=16, pady=16)
+
+        tk.Label(control_frame, text="Network Controls", font=("Segoe UI", 15, "bold"), fg="#283593", bg="#e3eafc").pack(pady=(0,14))
 
         # Button style
-        btn_style = {"font": ("Segoe UI", 12), "bg": "#bbdefb", "fg": "#1a237e", "activebackground": "#90caf9", "activeforeground": "#0d133d", "bd": 2, "relief": tk.RAISED}
+        btn_style = {"font": ("Segoe UI", 13), "bg": "#fff", "fg": "#283593", "activebackground": "#c5cae9", "activeforeground": "#1a237e", "bd": 0, "relief": tk.FLAT, "highlightthickness": 0}
 
         # Tooltips helper
         def add_tooltip(widget, text):
@@ -44,7 +49,7 @@ class EmergencySimulator:
                 x = widget.winfo_rootx() + 60
                 y = widget.winfo_rooty() + 20
                 widget.tooltip.wm_geometry(f"+{x}+{y}")
-                label = tk.Label(widget.tooltip, text=text, bg="#3949ab", fg="white", font=("Segoe UI", 10), padx=8, pady=4)
+                label = tk.Label(widget.tooltip, text=text, bg="#283593", fg="white", font=("Segoe UI", 10), padx=8, pady=4)
                 label.pack()
             def on_leave(e):
                 if hasattr(widget, 'tooltip'):
@@ -52,25 +57,24 @@ class EmergencySimulator:
             widget.bind("<Enter>", on_enter)
             widget.bind("<Leave>", on_leave)
 
-        btn_mst = tk.Button(control_frame, text="Generate MST", command=self.visualize_mst, width=20, **btn_style)
-        btn_mst.pack(pady=6)
-        add_tooltip(btn_mst, "Show Minimum Spanning Tree")
-
-        btn_kpaths = tk.Button(control_frame, text="Find K-Disjoint Paths", command=self.find_k_paths, width=20, **btn_style)
-        btn_kpaths.pack(pady=6)
-        add_tooltip(btn_kpaths, "Find multiple reliable paths")
-
-        btn_fail = tk.Button(control_frame, text="Simulate Node Failure", command=self.fail_node, width=20, **btn_style)
-        btn_fail.pack(pady=6)
-        add_tooltip(btn_fail, "Remove a node to simulate failure")
-
-        btn_reset = tk.Button(control_frame, text="Reset Network", command=self.reset_graph, width=20, **btn_style)
-        btn_reset.pack(pady=6)
-        add_tooltip(btn_reset, "Restore original network")
+        # Button icons (Unicode)
+        btns = [
+            {"text": "🗺️  Generate MST", "cmd": self.visualize_mst, "tip": "Show Minimum Spanning Tree"},
+            {"text": "🔗 Find K-Disjoint Paths", "cmd": self.find_k_paths, "tip": "Find multiple reliable paths"},
+            {"text": "⚠️  Simulate Node Failure", "cmd": self.fail_node, "tip": "Remove a node to simulate failure"},
+            {"text": "🔄 Reset Network", "cmd": self.reset_graph, "tip": "Restore original network"},
+        ]
+        for btn in btns:
+            b = tk.Button(control_frame, text=btn["text"], command=btn["cmd"], width=22, **btn_style)
+            b.pack(pady=8, ipadx=2, ipady=6)
+            b.configure(cursor="hand2")
+            b.bind("<Enter>", lambda e, w=b: w.config(bg="#e8eaf6"))
+            b.bind("<Leave>", lambda e, w=b: w.config(bg="#fff"))
+            add_tooltip(b, btn["tip"])
 
         # Plotting Area
         plot_frame = tk.Frame(self.root, bg="#f0f4f8", bd=2, relief=tk.FLAT)
-        plot_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=10, pady=10)
+        plot_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=16, pady=16)
         self.fig, self.ax = plt.subplots(figsize=(6, 5))
         self.fig.patch.set_facecolor('#e3eafc')
         self.canvas = FigureCanvasTkAgg(self.fig, master=plot_frame)
@@ -83,33 +87,37 @@ class EmergencySimulator:
         # Draw basic graph
         nx.draw(
             self.G, pos, ax=self.ax, with_labels=True,
-            node_color="#90caf9", node_size=1800, font_size=12,
-            font_weight="bold", edge_color="#3949ab", width=2
+            node_color="#fffde7", node_size=1900, font_size=13,
+            font_weight="bold", edge_color="#283593", width=2,
+            linewidths=2
         )
         labels = nx.get_edge_attributes(self.G, 'weight')
-        nx.draw_networkx_edge_labels(self.G, pos, edge_labels=labels, ax=self.ax, font_color="#1a237e", font_size=11)
+        nx.draw_networkx_edge_labels(self.G, pos, edge_labels=labels, ax=self.ax, font_color="#283593", font_size=12)
         # Highlight MST or Paths if provided
         if highlight_edges:
-            nx.draw_networkx_edges(self.G, pos, edgelist=highlight_edges, edge_color="#e53935", width=4, ax=self.ax)
+            nx.draw_networkx_edges(self.G, pos, edgelist=highlight_edges, edge_color="#e53935", width=5, ax=self.ax)
         if highlighted_nodes:
             nx.draw_networkx_nodes(self.G, pos, nodelist=highlighted_nodes, node_color="#e53935", ax=self.ax)
         self.ax.set_facecolor('#e3eafc')
-        self.ax.set_title("City Network Graph", fontsize=16, color="#1a237e", pad=16)
+        self.ax.set_title("City Network Graph", fontsize=17, color="#283593", pad=18)
+        self.ax.axis('off')
         self.canvas.draw()
 
     def visualize_mst(self):
         """Q1: Dynamic MST Visualization [cite: 234]"""
         mst_edges = list(nx.minimum_spanning_edges(self.G, algorithm='kruskal', data=False))
         self.draw_graph(highlight_edges=mst_edges)
+        self.status_var.set("MST computed using Kruskal's Algorithm. Complexity: O(E log E)")
         messagebox.showinfo("MST Logic", "MST computed using Kruskal's Algorithm.\nComplexity: O(E log E)")
 
     def find_k_paths(self):
         """Q2: Reliable Path Finder [cite: 239]"""
-        # Example: Find paths between Kathmandu and Chitwan
         try:
             paths = list(nx.edge_disjoint_paths(self.G, 'Kathmandu', 'Chitwan'))
+            self.status_var.set(f"Found {len(paths)} disjoint paths between Kathmandu and Chitwan.")
             messagebox.showinfo("K-Disjoint Paths", f"Found {len(paths)} disjoint paths.")
         except nx.NetworkXNoPath:
+            self.status_var.set("No path exists between Kathmandu and Chitwan.")
             messagebox.showwarning("Error", "No path exists.")
 
     def fail_node(self):
@@ -117,12 +125,16 @@ class EmergencySimulator:
         if 'Pokhara' in self.G:
             self.G.remove_node('Pokhara')
             self.draw_graph()
+            self.status_var.set("Node 'Pokhara' has failed. Rerouting required.")
             messagebox.showinfo("Failure", "Node 'Pokhara' has failed. Rerouting required.")
+        else:
+            self.status_var.set("Node 'Pokhara' is already removed.")
 
     def reset_graph(self):
         self.G.clear()
         self.add_sample_data()
         self.draw_graph()
+        self.status_var.set("Network reset to original state.")
 
 if __name__ == "__main__":
     root = tk.Tk()
